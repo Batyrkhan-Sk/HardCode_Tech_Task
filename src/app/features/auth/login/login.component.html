@@ -1,0 +1,76 @@
+<div class="login-container">
+  <div class="login-card">
+    <div class="login-header">
+      <h1 class="login-title">Welcome Back</h1>
+      <p class="login-subtitle">Sign in to access user management</p>
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+      <div class="form-group">
+        <label for="login" class="form-label">Login</label>
+        <input
+          type="text"
+          id="login"
+          formControlName="login"
+          class="form-input"
+          [class.error]="hasError('login')"
+          placeholder="Enter your login"
+          autocomplete="username"
+        />
+        <span class="error-message" *ngIf="hasError('login')">
+          {{ getErrorMessage('login') }}
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="password" class="form-label">Password</label>
+        <input
+          type="password"
+          id="password"
+          formControlName="password"
+          class="form-input"
+          [class.error]="hasError('password')"
+          placeholder="Enter your password"
+          autocomplete="current-password"
+        />
+        <span class="error-message" *ngIf="hasError('password')">
+          {{ getErrorMessage('password') }}
+        </span>
+      </div>
+
+      <div class="error-banner" *ngIf="errorMessage">
+        <svg class="error-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <span>{{ errorMessage }}</span>
+      </div>
+
+      <button
+        type="submit"
+        class="submit-button"
+        [disabled]="isSubmitting"
+      >
+        <span *ngIf="!isSubmitting">Sign In</span>
+        <span *ngIf="isSubmitting" class="loading-text">
+          <svg class="spinner" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none" />
+            <path class="opacity-75" fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+          </svg>
+          Signing in...
+        </span>
+      </button>
+    </form>
+
+    <div class="login-footer">
+      <p class="hint-text">
+        <svg class="hint-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        Default credentials: <strong>admin / admin</strong>
+      </p>
+    </div>
+  </div>
+</div>

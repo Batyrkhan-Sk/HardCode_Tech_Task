@@ -1,0 +1,112 @@
+<div class="users-container">
+  <!-- Header -->
+  <header class="header">
+    <div class="header-content">
+      <div class="header-left">
+        <h1 class="header-title">User Management</h1>
+        <p class="header-subtitle" *ngIf="currentUser"><strong>{{ currentUser }}</strong></p>
+      </div>
+      <button class="logout-button" (click)="logout()" aria-label="Logout">
+        <svg class="logout-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+        </svg>
+        <span class="logout-text">Logout</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Controls -->
+  <div class="controls">
+    <div class="search-container">
+      <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+      </svg>
+      <input
+        type="text"
+        [(ngModel)]="searchTerm"
+        (ngModelChange)="onSearchChange($event)"
+        placeholder="Search users by name..."
+        class="search-input"
+        aria-label="Search users"
+      />
+      <button
+        *ngIf="searchTerm"
+        (click)="clearSearch()"
+        class="clear-button"
+        aria-label="Clear search"
+      >
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <button class="create-button" (click)="openCreateModal()" aria-label="Add new user">
+      <svg class="create-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 4v16m8-8H4" />
+      </svg>
+      <span>Add User</span>
+    </button>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading$ | async" class="state-container">
+    <div class="loader"></div>
+    <p class="state-text">Loading users...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="(error$ | async) as error" class="state-container error-state">
+    <svg class="state-icon error" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+    <h2 class="state-title">Unable to Load Users</h2>
+    <p class="state-text">{{ error }}</p>
+    <button class="retry-button" (click)="retryLoad()">
+      <svg class="retry-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+      </svg>
+      Retry
+    </button>
+  </div>
+
+  <!-- Users List -->
+  <div *ngIf="!(loading$ | async) && !(error$ | async)">
+    <div *ngIf="(filteredUsers$ | async) as users">
+      <!-- Empty State -->
+      <div *ngIf="users.length === 0" class="state-container empty-state">
+        <svg class="state-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+        </svg>
+        <h2 class="state-title">No Users Found</h2>
+        <p class="state-text" *ngIf="searchTerm">
+          No users match your search for "{{ searchTerm }}"
+        </p>
+        <p class="state-text" *ngIf="!searchTerm">
+          Start by adding a new user
+        </p>
+      </div>
+
+      <!-- User Cards Grid -->
+      <div *ngIf="users.length > 0" class="users-grid">
+        <app-user-card
+          *ngFor="let user of users; trackBy: trackByUserId"
+          [user]="user"
+          (deleteUser)="onDeleteUser($event)"
+        ></app-user-card>
+      </div>
+    </div>
+  </div>
+
+  <!-- Create User Modal -->
+  <app-create-user-modal
+    *ngIf="isCreateModalOpen"
+    (close)="closeCreateModal()"
+  ></app-create-user-modal>
+</div>
