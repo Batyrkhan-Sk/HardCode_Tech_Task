@@ -42,13 +42,6 @@
   }
 }
 
-.modal-header {
-  position: relative;
-  padding: 1.5rem;
-  border-bottom: 1px solid #e5e7eb;
-  text-align: center;
-}
-
 .warning-icon {
   width: 3.5rem;
   height: 3.5rem;

@@ -1,5 +1,4 @@
 <div class="users-container">
-  <!-- Header -->
   <header class="header">
     <div class="header-content">
       <div class="header-left">
@@ -12,7 +11,6 @@
     </div>
   </header>
 
-  <!-- Controls -->
   <div class="controls">
     <div class="search-container">
       <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -23,7 +21,7 @@
         type="text"
         [(ngModel)]="searchTerm"
         (ngModelChange)="onSearchChange($event)"
-        placeholder="Search users by name..."
+        placeholder="Search users..."
         class="search-input"
         aria-label="Search users"
       />
@@ -73,21 +71,15 @@
     </div>
 
     <button class="create-button" (click)="openCreateModal()" aria-label="Add new user">
-      <svg class="create-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M12 4v16m8-8H4" />
-      </svg>
       <span>Add User</span>
     </button>
   </div>
 
-  <!-- Loading State -->
   <div *ngIf="loading$ | async" class="state-container">
     <div class="loader"></div>
     <p class="state-text">Loading users...</p>
   </div>
 
-  <!-- Error State -->
   <div *ngIf="(error$ | async) as error" class="state-container error-state">
     <svg class="state-icon error" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -104,10 +96,8 @@
     </button>
   </div>
 
-  <!-- Users List -->
   <div *ngIf="!(loading$ | async) && !(error$ | async)">
     <div *ngIf="(filteredUsers$ | async) as users">
-      <!-- Empty State -->
       <div *ngIf="users.length === 0" class="state-container empty-state">
         <svg class="state-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -122,7 +112,6 @@
         </p>
       </div>
 
-      <!-- User Cards Grid -->
       <div *ngIf="users.length > 0" class="users-grid">
         <app-user-card
           *ngFor="let user of users; trackBy: trackByUserId"
@@ -133,13 +122,11 @@
     </div>
   </div>
 
-  <!-- Create User Modal -->
   <app-create-user-modal
     *ngIf="isCreateModalOpen"
     (close)="closeCreateModal()"
   ></app-create-user-modal>
 
-  <!-- Delete Confirmation Modal -->
   <app-delete-confirmation-modal
     *ngIf="isDeleteModalOpen && userToDelete"
     [user]="userToDelete"

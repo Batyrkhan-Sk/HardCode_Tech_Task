@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, combineLatest } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil, map, startWith } from 'rxjs/operators';
 import { User } from '../../core/models/user.model';
 import { UserService } from '../../core/services/user.service';
@@ -25,6 +25,7 @@ export class UsersComponent implements OnInit, OnDestroy {
 
   searchTerm: string = '';
   private searchSubject = new Subject<string>();
+  private sortSubject = new Subject<void>();
   private destroy$ = new Subject<void>();
 
   isCreateModalOpen: boolean = false;
@@ -52,11 +53,16 @@ export class UsersComponent implements OnInit, OnDestroy {
     this.loading$ = this.userService.loading$;
     this.error$ = this.userService.error$;
 
-    this.filteredUsers$ = this.searchSubject.pipe(
-      startWith(''),
-      debounceTime(300),
-      distinctUntilChanged(),
-      map(term => this.filterUsers(this.userService.getCurrentUsers(), term)),
+    this.filteredUsers$ = combineLatest([
+      this.users$,
+      this.searchSubject.pipe(
+        startWith(''),
+        debounceTime(300),
+        distinctUntilChanged()
+      ),
+      this.sortSubject.pipe(startWith(undefined))
+    ]).pipe(
+      map(([users, searchTerm]) => this.filterAndSortUsers(users, searchTerm)),
       takeUntil(this.destroy$)
     );
   }
@@ -71,9 +77,8 @@ export class UsersComponent implements OnInit, OnDestroy {
     this.searchSubject.next(term);
   }
 
-  private filterUsers(users: User[], term: string): User[] {
+  private filterAndSortUsers(users: User[], term: string): User[] {
     let filtered = users;
-
     if (term.trim()) {
       const searchLower = term.toLowerCase().trim();
       filtered = users.filter(user =>
@@ -121,7 +126,7 @@ export class UsersComponent implements OnInit, OnDestroy {
       this.sortBy = field;
       this.sortOrder = 'asc';
     }
-    this.searchSubject.next(this.searchTerm);
+    this.sortSubject.next();
   }
 
   openCreateModal(): void {
@@ -143,7 +148,6 @@ export class UsersComponent implements OnInit, OnDestroy {
   confirmDelete(): void {
     if (this.userToDelete) {
       this.userService.deleteUser(this.userToDelete.id);
-      this.searchSubject.next(this.searchTerm);
       this.closeDeleteModal();
     }
   }

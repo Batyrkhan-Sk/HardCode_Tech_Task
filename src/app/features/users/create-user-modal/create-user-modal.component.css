@@ -52,12 +52,6 @@
   border-bottom: 1px solid #e5e7eb;
 }
 
-.modal-title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #111827;
-}
-
 .close-button {
   width: 2rem;
   height: 2rem;
@@ -174,13 +168,13 @@
 }
 
 .submit-button {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #F2704C;
   color: white;
 }
 
 .submit-button:hover:not(:disabled) {
-  transform: translateY(-1px);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  background: #e05a35;
+  box-shadow: 0 10px 15px -3px rgba(242, 112, 76, 0.3);
 }
 
 .submit-button:active:not(:disabled) {

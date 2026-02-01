@@ -128,24 +128,25 @@
 .card-body {
   padding: 0 1.25rem 1.25rem;
   border-top: 1px solid #e5e7eb;
-  max-height: 0;
-  opacity: 0;
-  overflow: hidden;
-  transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-              opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-              padding 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: slideDown 0.3s ease-out;
 }
 
-.card-body.expanded {
-  max-height: 600px;
-  opacity: 1;
-  padding: 1rem 1.25rem 1.25rem;
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 500px;
+  }
 }
 
 .info-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 1rem;
+  padding-top: 1rem;
 }
 
 .info-item {
@@ -216,7 +217,7 @@
     font-size: 0.75rem;
   }
 
-  .card-body.expanded {
-    padding: 1rem;
+  .card-body {
+    padding: 0 1rem 1rem;
   }
 }

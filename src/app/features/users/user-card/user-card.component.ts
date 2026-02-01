@@ -15,7 +15,10 @@ export class UserCardComponent {
 
   isExpanded: boolean = false;
 
-  toggleExpand(): void {
+  toggleExpand(event?: Event): void {
+    if (event) {
+      event.stopPropagation();
+    }
     this.isExpanded = !this.isExpanded;
   }
 

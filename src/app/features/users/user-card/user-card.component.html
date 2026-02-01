@@ -37,7 +37,7 @@
     </div>
   </div>
 
-  <div class="card-body" [class.expanded]="isExpanded">
+  <div class="card-body" *ngIf="isExpanded">
     <div class="info-grid">
       <div class="info-item">
         <svg class="info-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
