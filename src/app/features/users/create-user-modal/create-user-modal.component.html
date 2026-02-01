@@ -24,7 +24,7 @@
           formControlName="name"
           class="form-input"
           [class.error]="hasError('name')"
-          placeholder="John Doe"
+          placeholder="Erzat Sadranov"
           autocomplete="name"
         />
         <span class="error-message" *ngIf="hasError('name')">
@@ -42,11 +42,47 @@
           formControlName="email"
           class="form-input"
           [class.error]="hasError('email')"
-          placeholder="john.doe@example.com"
+          placeholder="erza@example.com"
           autocomplete="email"
         />
         <span class="error-message" *ngIf="hasError('email')">
           {{ getErrorMessage('email') }}
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="phone" class="form-label">
+          Phone <span class="required">*</span>
+        </label>
+        <input
+          type="tel"
+          id="phone"
+          formControlName="phone"
+          class="form-input"
+          [class.error]="hasError('phone')"
+          placeholder="+7-775-777-7777"
+          autocomplete="tel"
+        />
+        <span class="error-message" *ngIf="hasError('phone')">
+          {{ getErrorMessage('phone') }}
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="website" class="form-label">
+          Website <span class="required">*</span>
+        </label>
+        <input
+          type="text"
+          id="website"
+          formControlName="website"
+          class="form-input"
+          [class.error]="hasError('website')"
+          placeholder="example.com"
+          autocomplete="url"
+        />
+        <span class="error-message" *ngIf="hasError('website')">
+          {{ getErrorMessage('website') }}
         </span>
       </div>
 
@@ -60,7 +96,7 @@
           formControlName="city"
           class="form-input"
           [class.error]="hasError('city')"
-          placeholder="New York"
+          placeholder="Astana"
           autocomplete="address-level2"
         />
         <span class="error-message" *ngIf="hasError('city')">

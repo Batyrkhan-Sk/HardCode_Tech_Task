@@ -27,7 +27,9 @@ export class CreateUserModalComponent implements OnDestroy {
     this.createForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(2)]],
       email: ['', [Validators.required, Validators.email]],
-      city: ['', [Validators.required, Validators.minLength(2)]]
+      city: ['', [Validators.required, Validators.minLength(2)]],
+      website: ['', [Validators.required, Validators.minLength(3)]],
+      phone: ['', [Validators.required, Validators.minLength(10)]]
     });
   }
 

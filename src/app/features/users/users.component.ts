@@ -9,11 +9,12 @@ import { UserService } from '../../core/services/user.service';
 import { AuthService } from '../../core/services/auth.service';
 import { UserCardComponent } from './user-card/user-card.component';
 import { CreateUserModalComponent } from './create-user-modal/create-user-modal.component';
+import { DeleteConfirmationModalComponent } from './delete-confirmation-modal/delete-confirmation-modal.component';
 
 @Component({
   selector: 'app-users',
   standalone: true,
-  imports: [CommonModule, FormsModule, UserCardComponent, CreateUserModalComponent],
+  imports: [CommonModule, FormsModule, UserCardComponent, CreateUserModalComponent, DeleteConfirmationModalComponent],
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.css']
 })
@@ -28,6 +29,11 @@ export class UsersComponent implements OnInit, OnDestroy {
 
   isCreateModalOpen: boolean = false;
   currentUser: string | null = null;
+  sortBy: 'name' | 'email' | 'city' = 'name';
+  sortOrder: 'asc' | 'desc' = 'asc';
+
+  isDeleteModalOpen: boolean = false;
+  userToDelete: User | null = null;
 
   filteredUsers$!: Observable<User[]>;
 
@@ -40,14 +46,12 @@ export class UsersComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.currentUser = this.authService.getCurrentUser();
 
-    // Load users ONCE on init (not on every search)
     this.userService.loadUsers();
 
     this.users$ = this.userService.users$;
     this.loading$ = this.userService.loading$;
     this.error$ = this.userService.error$;
 
-    // Set up client-side filtering with debounced search
     this.filteredUsers$ = this.searchSubject.pipe(
       startWith(''),
       debounceTime(300),
@@ -68,13 +72,56 @@ export class UsersComponent implements OnInit, OnDestroy {
   }
 
   private filterUsers(users: User[], term: string): User[] {
-    if (!term.trim()) {
-      return users;
+    let filtered = users;
+
+    if (term.trim()) {
+      const searchLower = term.toLowerCase().trim();
+      filtered = users.filter(user =>
+        user.name.toLowerCase().includes(searchLower)
+      );
     }
-    const searchLower = term.toLowerCase().trim();
-    return users.filter(user =>
-      user.name.toLowerCase().includes(searchLower)
-    );
+
+    return this.sortUsers(filtered);
+  }
+
+  private sortUsers(users: User[]): User[] {
+    return [...users].sort((a, b) => {
+      let valueA: string;
+      let valueB: string;
+
+      switch (this.sortBy) {
+        case 'name':
+          valueA = a.name.toLowerCase();
+          valueB = b.name.toLowerCase();
+          break;
+        case 'email':
+          valueA = a.email.toLowerCase();
+          valueB = b.email.toLowerCase();
+          break;
+        case 'city':
+          valueA = a.address.city.toLowerCase();
+          valueB = b.address.city.toLowerCase();
+          break;
+        default:
+          return 0;
+      }
+
+      if (this.sortOrder === 'asc') {
+        return valueA.localeCompare(valueB);
+      } else {
+        return valueB.localeCompare(valueA);
+      }
+    });
+  }
+
+  setSortBy(field: 'name' | 'email' | 'city'): void {
+    if (this.sortBy === field) {
+      this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortBy = field;
+      this.sortOrder = 'asc';
+    }
+    this.searchSubject.next(this.searchTerm);
   }
 
   openCreateModal(): void {
@@ -86,10 +133,24 @@ export class UsersComponent implements OnInit, OnDestroy {
   }
 
   onDeleteUser(id: number): void {
-    if (confirm('Are you sure you want to delete this user?')) {
-      this.userService.deleteUser(id);
-      this.searchSubject.next(this.searchTerm);
+    const user = this.userService.getCurrentUsers().find(u => u.id === id);
+    if (user) {
+      this.userToDelete = user;
+      this.isDeleteModalOpen = true;
     }
+  }
+
+  confirmDelete(): void {
+    if (this.userToDelete) {
+      this.userService.deleteUser(this.userToDelete.id);
+      this.searchSubject.next(this.searchTerm);
+      this.closeDeleteModal();
+    }
+  }
+
+  closeDeleteModal(): void {
+    this.isDeleteModalOpen = false;
+    this.userToDelete = null;
   }
 
   logout(): void {

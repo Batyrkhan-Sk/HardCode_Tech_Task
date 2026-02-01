@@ -7,11 +7,7 @@
         <p class="header-subtitle" *ngIf="currentUser"><strong>{{ currentUser }}</strong></p>
       </div>
       <button class="logout-button" (click)="logout()" aria-label="Logout">
-        <svg class="logout-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-        </svg>
-        <span class="logout-text">Logout</span>
+        Logout
       </button>
     </div>
   </header>
@@ -39,6 +35,39 @@
       >
         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <div class="sort-buttons">
+      <button
+        class="sort-button"
+        [class.active]="sortBy === 'name'"
+        (click)="setSortBy('name')"
+      >
+        Name
+        <svg *ngIf="sortBy === 'name'" class="sort-icon" [class.desc]="sortOrder === 'desc'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+        </svg>
+      </button>
+      <button
+        class="sort-button"
+        [class.active]="sortBy === 'email'"
+        (click)="setSortBy('email')"
+      >
+        Email
+        <svg *ngIf="sortBy === 'email'" class="sort-icon" [class.desc]="sortOrder === 'desc'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+        </svg>
+      </button>
+      <button
+        class="sort-button"
+        [class.active]="sortBy === 'city'"
+        (click)="setSortBy('city')"
+      >
+        City
+        <svg *ngIf="sortBy === 'city'" class="sort-icon" [class.desc]="sortOrder === 'desc'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
         </svg>
       </button>
     </div>
@@ -109,4 +138,12 @@
     *ngIf="isCreateModalOpen"
     (close)="closeCreateModal()"
   ></app-create-user-modal>
+
+  <!-- Delete Confirmation Modal -->
+  <app-delete-confirmation-modal
+    *ngIf="isDeleteModalOpen && userToDelete"
+    [user]="userToDelete"
+    (confirm)="confirmDelete()"
+    (cancel)="closeDeleteModal()"
+  ></app-delete-confirmation-modal>
 </div>

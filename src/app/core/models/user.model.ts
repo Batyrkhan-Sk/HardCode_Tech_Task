@@ -32,4 +32,6 @@ export interface CreateUserDto {
   name: string;
   email: string;
   city: string;
+  website: string;
+  phone: string;
 }

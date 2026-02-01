@@ -69,8 +69,8 @@ export class UserService {
         zipcode: '',
         geo: { lat: '0', lng: '0' }
       },
-      phone: '',
-      website: '',
+      phone: userDto.phone,
+      website: userDto.website,
       company: { name: '', catchPhrase: '', bs: '' }
     };
 

@@ -1,6 +1,6 @@
 .users-container {
   min-height: 100vh;
-  background-color: #f9fafb;
+  background-color: #fefae0;
 }
 
 .header {
@@ -41,10 +41,7 @@
 }
 
 .logout-button {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.625rem 1rem;
+  padding: 0.625rem 1.25rem;
   background-color: #fef2f2;
   color: #dc2626;
   border: 1px solid #fecaca;
@@ -60,11 +57,6 @@
   border-color: #fca5a5;
 }
 
-.logout-icon {
-  width: 1.25rem;
-  height: 1.25rem;
-}
-
 .controls {
   max-width: 1280px;
   margin: 0 auto;
@@ -72,12 +64,55 @@
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;
+  align-items: center;
 }
 
 .search-container {
   flex: 1;
   min-width: 250px;
   position: relative;
+}
+
+.sort-buttons {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.sort-button {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.5rem 1rem;
+  background: white;
+  color: #6b7280;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.sort-button:hover {
+  background: #f9fafb;
+  border-color: #9ca3af;
+}
+
+.sort-button.active {
+  background: #f27405;
+  color: white;
+  border-color: #f27405;
+}
+
+.sort-icon {
+  width: 1rem;
+  height: 1rem;
+  transition: transform 0.2s;
+}
+
+.sort-icon.desc {
+  transform: rotate(180deg);
 }
 
 .search-icon {
@@ -139,7 +174,7 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem 1.5rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #f27405;
   color: white;
   border: none;
   border-radius: 0.5rem;
@@ -151,8 +186,9 @@
 }
 
 .create-button:hover {
+  background: #d96604;
   transform: translateY(-1px);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 15px -3px rgba(242, 116, 5, 0.3);
 }
 
 .create-button:active {
@@ -266,6 +302,11 @@
     min-width: 100%;
   }
 
+  .sort-buttons {
+    width: 100%;
+    justify-content: center;
+  }
+
   .create-button {
     width: 100%;
     justify-content: center;
@@ -273,10 +314,6 @@
 
   .users-grid {
     grid-template-columns: 1fr;
-  }
-
-  .logout-text {
-    display: inline;
   }
 }
 
@@ -288,9 +325,5 @@
   .state-container {
     padding: 2rem 1rem;
     margin: 2rem 1rem;
-  }
-
-  .logout-text {
-    display: none;
   }
 }
