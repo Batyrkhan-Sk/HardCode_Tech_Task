@@ -170,7 +170,6 @@
   height: 1rem;
 }
 
-/* Button color changed to #F2704C */
 .create-button {
   display: flex;
   align-items: center;
@@ -201,7 +200,7 @@
 }
 
 .state-container {
-  max-width: 600px;
+  max-width: 500px;
   margin: 4rem auto;
   padding: 3rem 2rem;
   text-align: center;
